@@ -1,1 +1,1 @@
-# LightMap
+# LightMap server
