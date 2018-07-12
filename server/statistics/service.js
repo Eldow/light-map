@@ -1,18 +1,19 @@
 import StatisticsModel from './model';
+import { CATEGORIES } from './constants';
 
 const getStatistics = async () => {
-  const statistics = await StatisticsModel.aggregate([
+  return await StatisticsModel.aggregate([
     {
       $project: {
         'fields.c_ens_moy': 1,
         category: {
           $switch: {
             branches: [
-              { case: { $lte: ['$fields.c_ens_moy', 700] }, then: 'Moins de 700 Kwh/m²/an' },
-              { case: { $and: [{ $gt: ['$fields.c_ens_moy', 700] }, { $lt: ['$fields.c_ens_moy', 800] }] }, then: 'De 700 à 800 Kwh/m²/an' },
-              { case: { $and: [{ $gt: ['$fields.c_ens_moy', 800] }, { $lt: ['$fields.c_ens_moy', 900] }] }, then: 'De 800 à 900 Kwh/m²/an' },
-              { case: { $and: [{ $gt: ['$fields.c_ens_moy', 900] }, { $lt: ['$fields.c_ens_moy', 1000] }] }, then: 'De 900 à 1000 Kwh/m²/an' },
-              { case: { $gte: ['$fields.c_ens_moy', 1000] }, then: 'Plus de 1000 Kwh/m²/an' }
+              { case: { $lte: ['$fields.c_ens_moy', 700] }, then: { key: CATEGORIES.LT_700, index: 1 }},
+              { case: { $and: [{ $gt: ['$fields.c_ens_moy', 700] }, { $lt: ['$fields.c_ens_moy', 800] }] }, then: { key: CATEGORIES.BT_700_800, index: 2 }},
+              { case: { $and: [{ $gt: ['$fields.c_ens_moy', 800] }, { $lt: ['$fields.c_ens_moy', 900] }] }, then: { key: CATEGORIES.BT_800_900, index: 3 }},
+              { case: { $and: [{ $gt: ['$fields.c_ens_moy', 900] }, { $lt: ['$fields.c_ens_moy', 1000] }] }, then: { key: CATEGORIES.BT_900_1000, index: 4 }},
+              { case: { $gte: ['$fields.c_ens_moy', 1000] }, then: { key: CATEGORIES.GT_1000, index: 5 }}
             ],
             default: 'No match'
           }
@@ -26,10 +27,14 @@ const getStatistics = async () => {
         avg: { $avg: '$fields.c_ens_moy' },
         count: { $sum: 1 }
       }
+    },
+    {
+      $sort : {
+        '_id.index': -1,
+      }
     }
   ]);
-  return statistics;
-}
+};
 
 export default {
   getStatistics,
