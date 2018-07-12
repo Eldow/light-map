@@ -4,7 +4,6 @@ import path from 'path';
 import http from 'http';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import cors from 'cors';
 import morgan from 'morgan';
 
 import { seed, mongoUri } from './config';
@@ -29,7 +28,13 @@ if (seed) {
 const app = express();
 
 app.use(morgan('combined'));
-app.use(cors());
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
