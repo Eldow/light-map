@@ -30,7 +30,7 @@ const getStatistics = async () => {
     },
     {
       $sort : {
-        '_id.index': -1,
+        '_id.index': 1,
       }
     }
   ]);
