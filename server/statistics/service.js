@@ -26,8 +26,7 @@ const getStatistics = async () => {
         avg: { $avg: '$fields.c_ens_moy' },
         count: { $sum: 1 }
       }
-    },
-    { $sort: { _id: 1 } }
+    }
   ]);
   return statistics;
 }
