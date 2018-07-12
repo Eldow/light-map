@@ -40,16 +40,10 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Serve client dist
-app.use(express.static(path.join(__dirname, '../dist/light-map')));
-
 // Set our api routes
 app.use('/api/statistics', statisticsRoutes);
 
-// Catch all other routes and return the index file
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist/light-map/index.html'));
-});
+app.get('/', (req, res) => res.send('Hello World!'))
 
 /**
  * Get port from environment and store in Express.
