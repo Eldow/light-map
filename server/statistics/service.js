@@ -1,7 +1,6 @@
 import StatisticsModel from './model';
 
 const getStatistics = async () => {
-  console.log('get stat')
   const statistics = await StatisticsModel.aggregate([
     {
       $project: {
@@ -9,11 +8,11 @@ const getStatistics = async () => {
         category: {
           $switch: {
             branches: [
-              { case: { $lte: ['$fields.c_ens_moy', 700] }, then: 1 },
-              { case: { $and: [{ $gt: ['$fields.c_ens_moy', 700] }, { $lt: ['$fields.c_ens_moy', 800] }] }, then: 2 },
-              { case: { $and: [{ $gt: ['$fields.c_ens_moy', 800] }, { $lt: ['$fields.c_ens_moy', 900] }] }, then: 3 },
-              { case: { $and: [{ $gt: ['$fields.c_ens_moy', 900] }, { $lt: ['$fields.c_ens_moy', 1000] }] }, then: 4 },
-              { case: { $gte: ['$fields.c_ens_moy', 1000] }, then: 5 }
+              { case: { $lte: ['$fields.c_ens_moy', 700] }, then: 'Moins de 700 Kwh/m²/an' },
+              { case: { $and: [{ $gt: ['$fields.c_ens_moy', 700] }, { $lt: ['$fields.c_ens_moy', 800] }] }, then: 'De 700 à 800 Kwh/m²/an' },
+              { case: { $and: [{ $gt: ['$fields.c_ens_moy', 800] }, { $lt: ['$fields.c_ens_moy', 900] }] }, then: 'De 800 à 900 Kwh/m²/an' },
+              { case: { $and: [{ $gt: ['$fields.c_ens_moy', 900] }, { $lt: ['$fields.c_ens_moy', 1000] }] }, then: 'De 900 à 1000 Kwh/m²/an' },
+              { case: { $gte: ['$fields.c_ens_moy', 1000] }, then: 'Plus de 1000 Kwh/m²/an' }
             ],
             default: 'No match'
           }
