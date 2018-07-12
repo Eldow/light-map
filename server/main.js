@@ -42,6 +42,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Set our api routes
 app.use('/api/statistics', statisticsRoutes);
 
+app.get('*',function(req,res){
+  res.sendFile(__dirname + '/index.html');
+});
+
 /**
  * Get port from environment and store in Express.
  */
