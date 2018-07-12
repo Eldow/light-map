@@ -1,6 +1,5 @@
 // Get dependencies
 import express from 'express';
-import path from 'path';
 import http from 'http';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
@@ -42,8 +41,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Set our api routes
 app.use('/api/statistics', statisticsRoutes);
-
-app.get('/', (req, res) => res.send('Hello World!'))
 
 /**
  * Get port from environment and store in Express.
